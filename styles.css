@@ -686,36 +686,6 @@ footer {
     align-items: center;
 }
 
-.protected-msg {
-    background: var(--accent-hover);
-    color: var(--text-primary);
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    border: 1px solid var(--border-color);
-}
-
-/* Protected Games Styles */
-.protected-game {
-    border: 2px solid #4299e1;
-    background: #ebf8ff !important;
-}
-
-.protected-badge {
-    background: #4299e1;
-    color: white;
-    padding: 0.2rem 0.5rem;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    margin-left: 0.5rem;
-    font-weight: normal;
-}
-
-.protected-msg {
-    color: #4299e1;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    background: rgba(66, 153, 225, 0.1);
     border-radius: 5px;
     text-align: center;
     font-size: 0.9rem;
@@ -1207,48 +1177,6 @@ footer {
     margin-bottom: 1.5rem;
 }
 
-.protected-game {
-    border-left-color: #4299e1;
-    background: var(--bg-card);
-    position: relative;
-    overflow: hidden;
-}
-
-.protected-game::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(66, 153, 225, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-}
-
-[data-theme="dark"] .protected-game {
-    border-left-color: #4facfe;
-}
-
-[data-theme="dark"] .protected-game::before {
-    background: linear-gradient(135deg, rgba(76, 175, 254, 0.1) 0%, transparent 50%);
-}
-
-.protected-badge {
-    background: rgba(66, 153, 225, 0.1);
-    color: #4299e1;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    border: 1px solid rgba(66, 153, 225, 0.2);
-    margin-left: 0.5rem;
-}
-
-[data-theme="dark"] .protected-badge {
-    background: rgba(76, 175, 254, 0.15);
-    color: #4facfe;
-    border-color: rgba(76, 175, 254, 0.3);
-}
 
 /* Import/Export hidden file input */
 .hidden-file-input {

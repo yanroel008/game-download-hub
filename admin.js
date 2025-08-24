@@ -263,11 +263,7 @@ function loadAdminGames() {
     }
     
     gamesList.innerHTML = currentGames.map(game => {
-        const protectedClass = game.protected ? ' protected-game' : '';
-        const protectedBadge = game.protected ? '<span class="protected-badge">🔒 Protected</span>' : '';
-        const actionButton = game.protected ? 
-            '<div class="protected-msg">Core game - Cannot be deleted</div>' :
-            `<div class="game-actions">
+        const actionButton = `<div class="game-actions">
                 <button class="edit-btn" data-game-id="${game.id}" onclick="editGame(${game.id})">✏️ Edit</button>
                 <button class="delete-btn" data-game-id="${game.id}" data-game-title="${game.title}" onclick="confirmDeleteGameByData(this)">🗑️ Delete</button>
             </div>`;
@@ -275,11 +271,10 @@ function loadAdminGames() {
         const topGameBadge = game.isTopGame ? '<span style="color: #ffd700; margin-left: 8px;">🏆 TOP</span>' : '';
         
         return `
-            <div class="admin-game-item${protectedClass} ${game.isTopGame ? 'top-game-item' : ''}">
+            <div class="admin-game-item ${game.isTopGame ? 'top-game-item' : ''}">
                 <div class="admin-game-info">
                     <div class="admin-game-title">
                         ${game.title}
-                        ${protectedBadge}
                         ${topGameBadge}
                     </div>
                     <div class="admin-game-category">Category: ${capitalizeFirst(game.category)}</div>
@@ -841,10 +836,7 @@ function displayStats() {
 // Update admin statistics
 function updateAdminStats(games) {
     const totalGamesEl = document.getElementById('totalGames');
-    const protectedGamesEl = document.getElementById('protectedGames');
-    
     if (totalGamesEl) totalGamesEl.textContent = games.length;
-    if (protectedGamesEl) protectedGamesEl.textContent = games.filter(g => g.protected).length;
 }
 
 // Filter admin games by category
@@ -869,11 +861,7 @@ function displayFilteredAdminGames(games) {
     }
     
     gamesList.innerHTML = games.map(game => {
-        const protectedClass = game.protected ? ' protected-game' : '';
-        const protectedBadge = game.protected ? '<span class="protected-badge">🔒 Protected</span>' : '';
-        const actionButton = game.protected ? 
-            '<div class="protected-msg">Core game - Cannot be deleted</div>' :
-            `<div class="game-actions">
+        const actionButton = `<div class="game-actions">
                 <button class="edit-btn" data-game-id="${game.id}" onclick="editGame(${game.id})">✏️ Edit</button>
                 <button class="delete-btn" data-game-id="${game.id}" data-game-title="${game.title}" onclick="confirmDeleteGameByData(this)">🗑️ Delete</button>
             </div>`;
@@ -881,11 +869,10 @@ function displayFilteredAdminGames(games) {
         const topGameBadge = game.isTopGame ? '<span style="color: #ffd700; margin-left: 8px;">🏆 TOP</span>' : '';
         
         return `
-            <div class="admin-game-item${protectedClass} ${game.isTopGame ? 'top-game-item' : ''}">
+            <div class="admin-game-item ${game.isTopGame ? 'top-game-item' : ''}">
                 <div class="admin-game-info">
                     <div class="admin-game-title">
                         ${game.title}
-                        ${protectedBadge}
                         ${topGameBadge}
                     </div>
                     <div class="admin-game-category">Category: ${capitalizeFirst(game.category)}</div>
@@ -1533,16 +1520,14 @@ function confirmRemoveAllGames() {
     }
     
     const currentGames = getAllGames();
-    const nonProtectedGames = currentGames.filter(game => !game.protected);
     
-    if (nonProtectedGames.length === 0) {
-        showNotification('No non-protected games to remove.', 'error');
+    if (currentGames.length === 0) {
+        showNotification('No games to remove.', 'error');
         return;
     }
     
     const confirmed = confirm(
-        `Are you sure you want to remove ALL ${nonProtectedGames.length} non-protected games?\n\n` +
-        `Protected games will remain safe.\n\n` +
+        `Are you sure you want to remove ALL ${currentGames.length} games?\n\n` +
         `This action cannot be undone.`
     );
     
@@ -1554,22 +1539,21 @@ function confirmRemoveAllGames() {
 function removeAllGames() {
     try {
         const currentGames = getAllGames();
-        const protectedGames = currentGames.filter(game => game.protected);
         
-        // Update all references to only protected games
+        // Clear all games
         if (typeof window !== 'undefined') {
-            window.games = protectedGames;
-            window.filteredGames = [...protectedGames];
+            window.games = [];
+            window.filteredGames = [];
         }
         
         // Update main script variables
         if (typeof games !== 'undefined') {
-            games.splice(0, games.length, ...protectedGames);
-            filteredGames.splice(0, filteredGames.length, ...protectedGames);
+            games.splice(0, games.length);
+            filteredGames.splice(0, filteredGames.length);
         }
         
         // Save to localStorage
-        localStorage.setItem('games', JSON.stringify(protectedGames));
+        localStorage.setItem('games', JSON.stringify([]));
         
         // Update displays
         loadAdminGames();
@@ -1577,8 +1561,7 @@ function removeAllGames() {
             displayGames();
         }
         
-        const removedCount = currentGames.length - protectedGames.length;
-        showNotification(`Successfully removed ${removedCount} games! ${protectedGames.length} protected games remain.`, 'success');
+        showNotification(`Successfully removed all ${currentGames.length} games!`, 'success');
         
     } catch (error) {
         showNotification('Error removing games. Please try again.', 'error');
@@ -1635,14 +1618,7 @@ function debugAdminFunctions() {
 // Enhanced remove game function with better error handling
 function removeGameEnhanced(gameId) {
     try {
-        const gameToRemove = getAllGames().find(game => game.id === gameId);
-        
-        // Prevent deletion of protected games
-        if (gameToRemove && gameToRemove.protected) {
-            throw new Error('Cannot delete protected games');
-        }
-        
-        // Get current games
+        // Get current games and remove the specified game
         let currentGames = getAllGames();
         currentGames = currentGames.filter(game => game.id !== gameId);
         

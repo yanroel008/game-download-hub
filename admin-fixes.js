@@ -65,27 +65,24 @@ document.addEventListener('DOMContentLoaded', function() {
 // Enhanced remove all games function with better UI feedback
 function removeAllGamesUI() {
     const currentGames = getAllGames();
-    const nonProtectedGames = currentGames.filter(game => !game.protected);
-    const protectedGames = currentGames.filter(game => game.protected);
     
-    if (nonProtectedGames.length === 0) {
-        alert('No non-protected games to remove.');
+    if (currentGames.length === 0) {
+        alert('No games to remove.');
         return;
     }
     
-    const message = `This will remove ${nonProtectedGames.length} games.\n` +
-                   `${protectedGames.length} protected games will remain.\n\n` +
+    const message = `This will remove all ${currentGames.length} games.\n\n` +
                    `Are you sure you want to continue?`;
     
     if (confirm(message)) {
         try {
-            // Update localStorage with only protected games
-            localStorage.setItem('games', JSON.stringify(protectedGames));
+            // Clear all games
+            localStorage.setItem('games', JSON.stringify([]));
             
             // Update global variables if they exist
             if (typeof window.games !== 'undefined') {
-                window.games = protectedGames;
-                window.filteredGames = [...protectedGames];
+                window.games = [];
+                window.filteredGames = [];
             }
             
             // Refresh displays
@@ -97,7 +94,7 @@ function removeAllGamesUI() {
                 displayGames();
             }
             
-            alert(`Successfully removed ${nonProtectedGames.length} games!`);
+            alert(`Successfully removed all ${currentGames.length} games!`);
             
         } catch (error) {
             console.error('Error removing games:', error);
@@ -367,8 +364,7 @@ function getDefaultGames() {
             downloadUrl: "#",
             size: "2.5 GB",
             image: "🏰",
-            imageType: "emoji",
-            protected: true
+            imageType: "emoji"
         },
         {
             id: 2,
@@ -378,8 +374,7 @@ function getDefaultGames() {
             downloadUrl: "#",
             size: "1.8 GB",
             image: "🚀",
-            imageType: "emoji",
-            protected: true
+            imageType: "emoji"
         },
         {
             id: 3,
@@ -389,8 +384,7 @@ function getDefaultGames() {
             downloadUrl: "#",
             size: "4.1 GB", 
             image: "🐉",
-            imageType: "emoji",
-            protected: true
+            imageType: "emoji"
         }
     ];
 }

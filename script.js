@@ -7,8 +7,7 @@ let games = [
         description: "Embark on an epic journey through mystical lands filled with magic and wonder.",
         downloadUrl: "#",
         size: "2.5 GB",
-        image: "🏰",
-        protected: true
+        image: "🏰"
     },
     {
         id: 2,
@@ -17,8 +16,7 @@ let games = [
         description: "Fast-paced space combat game with stunning graphics and intense gameplay.",
         downloadUrl: "#",
         size: "1.8 GB",
-        image: "🚀",
-        protected: true
+        image: "🚀"
     },
     {
         id: 3,
@@ -45,8 +43,7 @@ let games = [
         description: "An immersive RPG experience with deep storytelling and character development.",
         downloadUrl: "#",
         size: "4.1 GB",
-        image: "🐉",
-        protected: true
+        image: "🐉"
     }
 ];
 
@@ -385,13 +382,6 @@ function addGame(gameData) {
 
 // Remove game (used by admin panel)
 function removeGame(gameId) {
-    const gameToRemove = games.find(game => game.id === gameId);
-    
-    // Prevent deletion of protected games
-    if (gameToRemove && gameToRemove.protected) {
-        throw new Error('Cannot delete protected games');
-    }
-    
     games = games.filter(game => game.id !== gameId);
     filteredGames = [...games];
     saveGamesToStorage();

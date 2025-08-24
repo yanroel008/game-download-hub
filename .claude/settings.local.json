@@ -6,7 +6,8 @@
       "Bash(del test.html)",
       "Bash(git init:*)",
       "Bash(gh repo create:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
