@@ -5,9 +5,9 @@ let filteredGames = [...games];
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-    displayGames();
     loadGamesFromStorage();
     initializeTheme();
+    displayGames();
     displayTopGames();
     initializeTopGamesSlider();
 });
@@ -118,8 +118,11 @@ function loadGamesFromStorage() {
     if (storedGames) {
         games = JSON.parse(storedGames);
         filteredGames = [...games];
-        displayGames();
     }
+    // Always display games (even if empty) and refresh top games and stats
+    displayGames();
+    displayTopGames();
+    updateSiteStats();
 }
 
 // Save games to localStorage
@@ -330,6 +333,7 @@ function addGame(gameData) {
     filteredGames = [...games];
     saveGamesToStorage();
     displayGames();
+    updateSiteStats();
     
     return newGame;
 }
@@ -340,6 +344,7 @@ function removeGame(gameId) {
     filteredGames = [...games];
     saveGamesToStorage();
     displayGames();
+    updateSiteStats();
 }
 
 // Get all games (used by admin panel)
@@ -779,10 +784,69 @@ window.addEventListener('resize', function() {
     currentSlideIndex = 0;
 });
 
-// Update the original displayGames to also refresh top games
+// Update the original displayGames to also refresh top games and stats
 const originalDisplayGamesFunction = displayGames;
 displayGames = function() {
     originalDisplayGamesFunction();
     displayTopGames(); // Update top games when games change
+    updateSiteStats(); // Update statistics when games change
     setTimeout(addLoadingAnimation, 50);
 };
+
+// Site Statistics Functions
+function updateSiteStats() {
+    const totalGamesEl = document.getElementById('totalGamesCount');
+    const categoriesEl = document.getElementById('categoriesCount');
+    const topGamesEl = document.getElementById('topGamesCount');
+    const totalSizeEl = document.getElementById('totalSizeCount');
+    
+    if (!totalGamesEl) return; // Stats section not loaded yet
+    
+    // Total games count
+    totalGamesEl.textContent = games.length;
+    
+    // Unique categories count
+    const uniqueCategories = new Set(games.map(game => game.category));
+    categoriesEl.textContent = uniqueCategories.size;
+    
+    // Top games count
+    const topGames = games.filter(game => game.isTopGame);
+    topGamesEl.textContent = topGames.length;
+    
+    // Total size calculation
+    const totalSizeGB = calculateTotalSize();
+    totalSizeEl.textContent = `${totalSizeGB} GB`;
+}
+
+function calculateTotalSize() {
+    let totalGB = 0;
+    
+    games.forEach(game => {
+        if (game.size) {
+            // Extract numeric value from size string (e.g., "2.5 GB" -> 2.5)
+            const sizeMatch = game.size.match(/(\d+\.?\d*)/);
+            if (sizeMatch) {
+                let size = parseFloat(sizeMatch[1]);
+                
+                // Convert MB to GB if needed
+                if (game.size.toLowerCase().includes('mb')) {
+                    size = size / 1024;
+                }
+                
+                totalGB += size;
+            }
+        }
+    });
+    
+    return Math.round(totalGB * 10) / 10; // Round to 1 decimal place
+}
+
+// Add animation to statistics when they update
+function animateStatCard(element) {
+    element.style.transform = 'scale(1.05)';
+    element.style.transition = 'transform 0.3s ease';
+    
+    setTimeout(() => {
+        element.style.transform = 'scale(1)';
+    }, 300);
+}
