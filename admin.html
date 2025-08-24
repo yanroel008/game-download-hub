@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - Game Download Hub</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="index.html" class="nav-logo">🎮 GameHub Admin</a>
+                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    ☰
+                </button>
+                <div class="nav-links" id="navLinks">
+                    <a href="index.html" onclick="closeMobileMenu()">Back to Site</a>
+                    <a href="#" onclick="logout(); closeMobileMenu();" id="logoutBtn" style="display: none;">Logout</a>
+                    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+                        <span class="theme-toggle-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2>Admin Portal</h2>
+                <p>Manage your game collection</p>
+            </div>
+            
+            <div class="admin-content">
+                <!-- Login Section -->
+                <div id="loginSection" class="login-section">
+                    <form class="login-form" onsubmit="login(event)">
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" required>
+                        </div>
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                    <div id="loginError" style="color: red; text-align: center; margin-top: 1rem; display: none;">
+                        Invalid credentials. Please try again.
+                    </div>
+                    <div style="margin-top: 2rem; padding: 1rem; background: #f0f0f0; border-radius: 8px;">
+                        <p><strong>Demo Credentials:</strong></p>
+                        <p>Username: admin</p>
+                        <p>Password: password</p>
+                    </div>
+                </div>
+
+                <!-- Admin Dashboard -->
+                <div id="adminDashboard" style="display: none;">
+                    <h3>Add New Game</h3>
+                    <form id="addGameForm" onsubmit="addNewGame(event)">
+                        <div class="form-group">
+                            <label for="gameTitle">Game Title:</label>
+                            <input type="text" id="gameTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gameCategory">Category:</label>
+                            <select id="gameCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="action">Action</option>
+                                <option value="adventure">Adventure</option>
+                                <option value="strategy">Strategy</option>
+                                <option value="rpg">RPG</option>
+                                <option value="puzzle">Puzzle</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gameDescription">Description:</label>
+                            <textarea id="gameDescription" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="gameDownloadUrl">Download URL:</label>
+                            <input type="url" id="gameDownloadUrl" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gameSize">Game Size:</label>
+                            <input type="text" id="gameSize" placeholder="e.g., 2.5 GB" required>
+                        </div>
+                        
+                        <!-- Additional Game Information -->
+                        <div class="form-group">
+                            <label for="gameDeveloper">Developer:</label>
+                            <input type="text" id="gameDeveloper" placeholder="e.g., Epic Games">
+                        </div>
+                        <div class="form-group">
+                            <label for="gameReleaseDate">Release Date:</label>
+                            <input type="text" id="gameReleaseDate" placeholder="e.g., 2024">
+                        </div>
+                        
+                        <!-- System Requirements -->
+                        <div class="requirements-section">
+                            <h3>System Requirements</h3>
+                            <div class="requirements-tabs">
+                                <button type="button" class="req-tab active" onclick="switchReqTab('minimum')">Minimum</button>
+                                <button type="button" class="req-tab" onclick="switchReqTab('recommended')">Recommended</button>
+                            </div>
+                            
+                            <div id="minimumReqs" class="req-content active">
+                                <div class="form-group">
+                                    <label for="minOS">Operating System:</label>
+                                    <input type="text" id="minOS" placeholder="e.g., Windows 10">
+                                </div>
+                                <div class="form-group">
+                                    <label for="minProcessor">Processor:</label>
+                                    <input type="text" id="minProcessor" placeholder="e.g., Intel i3 or equivalent">
+                                </div>
+                                <div class="form-group">
+                                    <label for="minMemory">Memory:</label>
+                                    <input type="text" id="minMemory" placeholder="e.g., 4 GB RAM">
+                                </div>
+                                <div class="form-group">
+                                    <label for="minGraphics">Graphics:</label>
+                                    <input type="text" id="minGraphics" placeholder="e.g., DirectX 11 compatible">
+                                </div>
+                                <div class="form-group">
+                                    <label for="minStorage">Storage:</label>
+                                    <input type="text" id="minStorage" placeholder="e.g., 5 GB available space">
+                                </div>
+                            </div>
+                            
+                            <div id="recommendedReqs" class="req-content">
+                                <div class="form-group">
+                                    <label for="recOS">Operating System:</label>
+                                    <input type="text" id="recOS" placeholder="e.g., Windows 11">
+                                </div>
+                                <div class="form-group">
+                                    <label for="recProcessor">Processor:</label>
+                                    <input type="text" id="recProcessor" placeholder="e.g., Intel i5 or equivalent">
+                                </div>
+                                <div class="form-group">
+                                    <label for="recMemory">Memory:</label>
+                                    <input type="text" id="recMemory" placeholder="e.g., 8 GB RAM">
+                                </div>
+                                <div class="form-group">
+                                    <label for="recGraphics">Graphics:</label>
+                                    <input type="text" id="recGraphics" placeholder="e.g., GTX 1060 or equivalent">
+                                </div>
+                                <div class="form-group">
+                                    <label for="recStorage">Storage:</label>
+                                    <input type="text" id="recStorage" placeholder="e.g., SSD recommended">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="gameImageType">Game Image Options:</label>
+                            <select id="gameImageType" onchange="toggleImageInput()">
+                                <option value="url">🌐 Image URL</option>
+                                <option value="upload">📁 Upload from Computer</option>
+                                <option value="generate">✨ AI Generated Placeholder</option>
+                            </select>
+                        </div>
+                        
+                        
+                        <div class="form-group" id="urlGroup">
+                            <label for="gameImageUrl">Image URL:</label>
+                            <input type="url" id="gameImageUrl" placeholder="https://example.com/image.jpg" onchange="previewUrlImage()">
+                            <div class="url-preview" id="urlPreview"></div>
+                        </div>
+                        
+                        <div class="form-group" id="uploadGroup" style="display: none;">
+                            <label for="gameImageUpload">Upload Image from Computer:</label>
+                            <div class="image-upload-container">
+                                <input type="file" id="gameImageUpload" accept="image/*" onchange="previewUploadedImage(this)">
+                                <div class="image-preview" id="imagePreview">
+                                    <div class="upload-icon">📁</div>
+                                    <span>Click here or drag & drop your image</span>
+                                    <small>Supports: JPG, PNG, GIF, WebP (Max: 5MB)</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="form-group" id="generateGroup" style="display: none;">
+                            <label>Generate AI Placeholder:</label>
+                            <div class="generate-options">
+                                <button type="button" class="btn secondary" onclick="generatePlaceholder('geometric')">🔷 Geometric</button>
+                                <button type="button" class="btn secondary" onclick="generatePlaceholder('gradient')">🌈 Gradient</button>
+                                <button type="button" class="btn secondary" onclick="generatePlaceholder('pattern')">🔳 Pattern</button>
+                                <button type="button" class="btn secondary" onclick="generatePlaceholder('abstract')">🎨 Abstract</button>
+                            </div>
+                            <div class="generate-preview" id="generatePreview"></div>
+                        </div>
+                        
+                        <!-- Screenshots Section -->
+                        <div class="form-group">
+                            <label for="gameScreenshots">Game Screenshots:</label>
+                            <div class="screenshots-upload">
+                                <div class="screenshot-upload-area" onclick="triggerScreenshotUpload()">
+                                    <div class="upload-icon">📷</div>
+                                    <span>Click to add screenshots</span>
+                                    <small>Supports: JPG, PNG, WebP (Max: 2MB each, up to 6 screenshots)</small>
+                                </div>
+                                <input type="file" id="gameScreenshots" accept="image/*" multiple onchange="handleScreenshotUpload(this)" style="display: none;">
+                                <div class="screenshots-preview" id="screenshotsPreview"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Videos Section -->
+                        <div class="form-group">
+                            <label for="gameVideos">Game Videos (Optional):</label>
+                            <div class="videos-upload">
+                                <div class="video-input-container">
+                                    <div class="video-url-input">
+                                        <input type="url" id="videoUrlInput" placeholder="https://www.youtube.com/watch?v=..." onchange="previewVideo()">
+                                        <button type="button" class="btn secondary" onclick="addVideoUrl()">📹 Add Video</button>
+                                    </div>
+                                    <small>Supports: YouTube, Vimeo, and other video URLs (up to 3 videos)</small>
+                                </div>
+                                <div class="videos-preview" id="videosPreview"></div>
+                            </div>
+                        </div>
+
+                        <!-- Top Game Option -->
+                        <div class="form-group">
+                            <div class="checkbox-container">
+                                <input type="checkbox" id="isTopGame">
+                                <label for="isTopGame" class="checkbox-label">
+                                    <span class="checkbox-icon">🏆</span>
+                                    Mark as Top Game
+                                    <small>Featured games will appear in the top games slider</small>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn">Add Game</button>
+                    </form>
+
+                    <div class="admin-games">
+                        <div class="admin-section-header">
+                            <h3>Current Games</h3>
+                            <div class="admin-stats">
+                                <div class="stat-card">
+                                    <span class="stat-number" id="totalGames">0</span>
+                                    <span class="stat-label">Total Games</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-number" id="protectedGames">0</span>
+                                    <span class="stat-label">Protected</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="admin-filters">
+                            <select id="adminCategoryFilter" onchange="filterAdminGames()">
+                                <option value="">All Categories</option>
+                                <option value="action">Action</option>
+                                <option value="adventure">Adventure</option>
+                                <option value="strategy">Strategy</option>
+                                <option value="rpg">RPG</option>
+                                <option value="puzzle">Puzzle</option>
+                            </select>
+                            <button class="btn secondary" onclick="exportGames()">📥 Export Games</button>
+                            <button class="btn secondary" onclick="importGames()">📤 Import Games</button>
+                            <button class="btn danger" onclick="confirmRemoveAllGames()">🗑️ Remove All Games</button>
+                        </div>
+                        
+                        <div id="adminGamesList" class="admin-games-list">
+                            <!-- Games will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 GameHub Admin Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Edit Game Modal -->
+    <div class="modal-overlay" id="editModal" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>✏️ Edit Game</h3>
+                <button class="modal-close" onclick="closeEditModal()">&times;</button>
+            </div>
+            <div class="modal-content">
+                <form id="editGameForm" onsubmit="updateGame(event)">
+                    <input type="hidden" id="editGameId">
+                    
+                    <div class="form-group">
+                        <label for="editGameTitle">Game Title:</label>
+                        <input type="text" id="editGameTitle" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editGameCategory">Category:</label>
+                        <select id="editGameCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="action">Action</option>
+                            <option value="adventure">Adventure</option>
+                            <option value="strategy">Strategy</option>
+                            <option value="rpg">RPG</option>
+                            <option value="puzzle">Puzzle</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editGameDescription">Description:</label>
+                        <textarea id="editGameDescription" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editGameDownloadUrl">Download URL:</label>
+                        <input type="url" id="editGameDownloadUrl" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editGameSize">Game Size:</label>
+                        <input type="text" id="editGameSize" placeholder="e.g., 2.5 GB" required>
+                    </div>
+                    
+                    <!-- Additional Game Information -->
+                    <div class="form-group">
+                        <label for="editGameDeveloper">Developer:</label>
+                        <input type="text" id="editGameDeveloper" placeholder="e.g., Epic Games">
+                    </div>
+                    <div class="form-group">
+                        <label for="editGameReleaseDate">Release Date:</label>
+                        <input type="text" id="editGameReleaseDate" placeholder="e.g., 2024">
+                    </div>
+                    
+                    <!-- System Requirements -->
+                    <div class="requirements-section">
+                        <h3>System Requirements</h3>
+                        <div class="requirements-tabs">
+                            <button type="button" class="req-tab active" onclick="switchEditReqTab('minimum')">Minimum</button>
+                            <button type="button" class="req-tab" onclick="switchEditReqTab('recommended')">Recommended</button>
+                        </div>
+                        
+                        <div id="editMinimumReqs" class="req-content active">
+                            <div class="form-group">
+                                <label for="editMinOS">Operating System:</label>
+                                <input type="text" id="editMinOS" placeholder="e.g., Windows 10">
+                            </div>
+                            <div class="form-group">
+                                <label for="editMinProcessor">Processor:</label>
+                                <input type="text" id="editMinProcessor" placeholder="e.g., Intel i3 or equivalent">
+                            </div>
+                            <div class="form-group">
+                                <label for="editMinMemory">Memory:</label>
+                                <input type="text" id="editMinMemory" placeholder="e.g., 4 GB RAM">
+                            </div>
+                            <div class="form-group">
+                                <label for="editMinGraphics">Graphics:</label>
+                                <input type="text" id="editMinGraphics" placeholder="e.g., DirectX 11 compatible">
+                            </div>
+                            <div class="form-group">
+                                <label for="editMinStorage">Storage:</label>
+                                <input type="text" id="editMinStorage" placeholder="e.g., 5 GB available space">
+                            </div>
+                        </div>
+                        
+                        <div id="editRecommendedReqs" class="req-content">
+                            <div class="form-group">
+                                <label for="editRecOS">Operating System:</label>
+                                <input type="text" id="editRecOS" placeholder="e.g., Windows 11">
+                            </div>
+                            <div class="form-group">
+                                <label for="editRecProcessor">Processor:</label>
+                                <input type="text" id="editRecProcessor" placeholder="e.g., Intel i5 or equivalent">
+                            </div>
+                            <div class="form-group">
+                                <label for="editRecMemory">Memory:</label>
+                                <input type="text" id="editRecMemory" placeholder="e.g., 8 GB RAM">
+                            </div>
+                            <div class="form-group">
+                                <label for="editRecGraphics">Graphics:</label>
+                                <input type="text" id="editRecGraphics" placeholder="e.g., GTX 1060 or equivalent">
+                            </div>
+                            <div class="form-group">
+                                <label for="editRecStorage">Storage:</label>
+                                <input type="text" id="editRecStorage" placeholder="e.g., SSD recommended">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editGameImageType">Change Image:</label>
+                        <select id="editGameImageType" onchange="toggleEditImageInput()">
+                            <option value="keep">Keep Current Image</option>
+                            <option value="url">🌐 Image URL</option>
+                            <option value="upload">📁 Upload from Computer</option>
+                            <option value="generate">✨ AI Generated Placeholder</option>
+                        </select>
+                    </div>
+
+                    <div class="current-image-preview" id="currentImagePreview">
+                        <label>Current Image:</label>
+                        <div class="current-image" id="currentImage"></div>
+                    </div>
+                    
+                    <!-- Image input groups (same as add form) -->
+                    
+                    <div class="form-group" id="editUrlGroup" style="display: none;">
+                        <label for="editGameImageUrl">Image URL:</label>
+                        <input type="url" id="editGameImageUrl" placeholder="https://example.com/image.jpg" onchange="previewEditUrlImage()">
+                        <div class="url-preview" id="editUrlPreview"></div>
+                    </div>
+                    
+                    <div class="form-group" id="editUploadGroup" style="display: none;">
+                        <label for="editGameImageUpload">Upload Image from Computer:</label>
+                        <div class="image-upload-container">
+                            <input type="file" id="editGameImageUpload" accept="image/*" onchange="previewEditUploadedImage(this)">
+                            <div class="image-preview" id="editImagePreview">
+                                <div class="upload-icon">📁</div>
+                                <span>Click here or drag & drop your image</span>
+                                <small>Supports: JPG, PNG, GIF, WebP (Max: 5MB)</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="form-group" id="editGenerateGroup" style="display: none;">
+                        <label>Generate AI Placeholder:</label>
+                        <div class="generate-options">
+                            <button type="button" class="btn secondary" onclick="generateEditPlaceholder('geometric')">🔷 Geometric</button>
+                            <button type="button" class="btn secondary" onclick="generateEditPlaceholder('gradient')">🌈 Gradient</button>
+                            <button type="button" class="btn secondary" onclick="generateEditPlaceholder('pattern')">🔳 Pattern</button>
+                            <button type="button" class="btn secondary" onclick="generateEditPlaceholder('abstract')">🎨 Abstract</button>
+                        </div>
+                        <div class="generate-preview" id="editGeneratePreview"></div>
+                    </div>
+                    
+                    <!-- Edit Screenshots Section -->
+                    <div class="form-group">
+                        <label for="editGameScreenshots">Game Screenshots:</label>
+                        <div class="screenshots-upload">
+                            <div class="screenshot-upload-area" onclick="triggerEditScreenshotUpload()">
+                                <div class="upload-icon">📷</div>
+                                <span>Click to add/change screenshots</span>
+                                <small>Supports: JPG, PNG, WebP (Max: 2MB each, up to 6 screenshots)</small>
+                            </div>
+                            <input type="file" id="editGameScreenshots" accept="image/*" multiple onchange="handleEditScreenshotUpload(this)" style="display: none;">
+                            <div class="screenshots-preview" id="editScreenshotsPreview"></div>
+                            <div class="current-screenshots" id="currentScreenshots">
+                                <label>Current Screenshots:</label>
+                                <div class="current-screenshots-grid" id="currentScreenshotsGrid"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Edit Videos Section -->
+                    <div class="form-group">
+                        <label for="editGameVideos">Game Videos (Optional):</label>
+                        <div class="videos-upload">
+                            <div class="video-input-container">
+                                <div class="video-url-input">
+                                    <input type="url" id="editVideoUrlInput" placeholder="https://www.youtube.com/watch?v=..." onchange="previewEditVideo()">
+                                    <button type="button" class="btn secondary" onclick="addEditVideoUrl()">📹 Add Video</button>
+                                </div>
+                                <small>Supports: YouTube, Vimeo, and other video URLs (up to 3 videos)</small>
+                            </div>
+                            <div class="videos-preview" id="editVideosPreview"></div>
+                            <div class="current-videos" id="currentVideos">
+                                <label>Current Videos:</label>
+                                <div class="current-videos-grid" id="currentVideosGrid"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Top Game Option -->
+                    <div class="form-group">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="editIsTopGame">
+                            <label for="editIsTopGame" class="checkbox-label">
+                                <span class="checkbox-icon">🏆</span>
+                                Mark as Top Game
+                                <small>Featured games will appear in the top games slider</small>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn secondary" onclick="closeEditModal()">Cancel</button>
+                        <button type="submit" class="btn">Update Game</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="admin.js"></script>
+    <script src="admin-fixes.js"></script>
+</body>
+</html>
