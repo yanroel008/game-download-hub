@@ -355,38 +355,7 @@ function getAllGamesFixed() {
 }
 
 function getDefaultGames() {
-    return [
-        {
-            id: 1,
-            title: "Epic Adventure Quest",
-            category: "adventure",
-            description: "Embark on an epic journey through mystical lands filled with magic and wonder.",
-            downloadUrl: "#",
-            size: "2.5 GB",
-            image: "🏰",
-            imageType: "emoji"
-        },
-        {
-            id: 2,
-            title: "Space Warriors", 
-            category: "action",
-            description: "Fast-paced space combat game with stunning graphics and intense gameplay.",
-            downloadUrl: "#",
-            size: "1.8 GB",
-            image: "🚀",
-            imageType: "emoji"
-        },
-        {
-            id: 3,
-            title: "Dragon's Tale RPG",
-            category: "rpg", 
-            description: "An immersive RPG experience with deep storytelling and character development.",
-            downloadUrl: "#",
-            size: "4.1 GB", 
-            image: "🐉",
-            imageType: "emoji"
-        }
-    ];
+    return [];
 }
 
 // Override the global getAllGames function

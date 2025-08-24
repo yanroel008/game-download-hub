@@ -1,51 +1,5 @@
 // Game data storage (in real app, this would be a database)
-let games = [
-    {
-        id: 1,
-        title: "Epic Adventure Quest",
-        category: "adventure",
-        description: "Embark on an epic journey through mystical lands filled with magic and wonder.",
-        downloadUrl: "#",
-        size: "2.5 GB",
-        image: "🏰"
-    },
-    {
-        id: 2,
-        title: "Space Warriors",
-        category: "action",
-        description: "Fast-paced space combat game with stunning graphics and intense gameplay.",
-        downloadUrl: "#",
-        size: "1.8 GB",
-        image: "🚀"
-    },
-    {
-        id: 3,
-        title: "Puzzle Master",
-        category: "puzzle",
-        description: "Challenge your mind with hundreds of brain-teasing puzzles and riddles.",
-        downloadUrl: "#",
-        size: "500 MB",
-        image: "🧩"
-    },
-    {
-        id: 4,
-        title: "Kingdom Builder",
-        category: "strategy",
-        description: "Build and manage your own medieval kingdom in this strategic city builder.",
-        downloadUrl: "#",
-        size: "3.2 GB",
-        image: "👑"
-    },
-    {
-        id: 5,
-        title: "Dragon's Tale RPG",
-        category: "rpg",
-        description: "An immersive RPG experience with deep storytelling and character development.",
-        downloadUrl: "#",
-        size: "4.1 GB",
-        image: "🐉"
-    }
-];
+let games = [];
 
 let filteredGames = [...games];
 
