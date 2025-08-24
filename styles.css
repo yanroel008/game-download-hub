@@ -44,6 +44,8 @@ body {
     background-attachment: fixed;
     min-height: 100vh;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
 }
 
 .container {
@@ -684,11 +686,6 @@ footer {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-}
-
-    border-radius: 5px;
-    text-align: center;
-    font-size: 0.9rem;
 }
 
 /* Mobile Menu Toggle */
@@ -3488,12 +3485,6 @@ footer {
 }
 
 /* Footer positioning fix */
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
 main {
     flex: 1;
 }
